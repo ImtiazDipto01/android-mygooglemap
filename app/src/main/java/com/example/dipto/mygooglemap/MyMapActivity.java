@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class MyMapActivity extends AppCompatActivity {
 
+    private static final String TAG = "MyMapActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
