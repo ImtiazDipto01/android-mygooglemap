@@ -83,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
         }
+        else{
+            ActivityCompat.requestPermissions(this, permission,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
     }
 
 
