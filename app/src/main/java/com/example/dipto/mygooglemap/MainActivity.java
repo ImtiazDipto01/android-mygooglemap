@@ -106,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
                     locationPermissionGrandted = true ;
                 }
                 if(locationPermissionGrandted){
-                    /*Intent intent = new Intent(MainActivity.this, MyMapActivity.class);
-                    startActivity(intent);*/
+                    Intent intent = new Intent(MainActivity.this, MyMapActivity.class);
+                    startActivity(intent);
                 } else{
                     Toast.makeText(MainActivity.this, "you have to accept the permission", Toast.LENGTH_SHORT).show();
                 }
