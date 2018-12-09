@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
                     COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 locationPermissionGrandted = true ;
+                Intent intent = new Intent(MainActivity.this, MyMapActivity.class);
+                startActivity(intent);
             }
             else{
                 ActivityCompat.requestPermissions(this, permission,
