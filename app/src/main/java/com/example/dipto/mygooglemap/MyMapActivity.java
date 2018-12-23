@@ -2,6 +2,8 @@ package com.example.dipto.mygooglemap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +23,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +59,10 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e(TAG, "EdittextValue : "+s.toString());
+                String serachKey = s.toString() ;
+                if(serachKey.length() > 2){
+                    geoLocating(serachKey);
+                }
             }
 
             @Override
@@ -63,12 +72,31 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         });
     }
 
+
+    // geoLocating method helps to get the searchResult for Location
+    private void geoLocating(String searchStr){
+        Geocoder geocoder = new Geocoder(MyMapActivity.this) ;
+        List<Address> list = new ArrayList<>() ;
+        try{
+            list = geocoder.getFromLocationName(searchStr, 1);
+        }
+        catch (IOException e){
+            Log.e(TAG, "geoLocating IOException: "+e);
+        }
+
+        if(list.size() > 0){
+            Address address = list.get(0);
+            Log.e(TAG, "geoLocating Address: "+address.toString());
+        }
+    }
+
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MyMapActivity.this);
     }
 
+    // getting device location
     private void getDeviceLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -91,6 +119,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    // moving the camera into map
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera : moving the camera to, lat: " + latLng.latitude + " lng:" + latLng.longitude);
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
