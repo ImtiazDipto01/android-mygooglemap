@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -87,6 +88,9 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         if(list.size() > 0){
             Address address = list.get(0);
             Log.e(TAG, "geoLocating Address: "+address.toString());
+            if(searchStr.contains(".")){
+                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
+            }
         }
     }
 
@@ -108,7 +112,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
                     if (task.isSuccessful()) {
                         Log.d(TAG, "onComplete : Location Successfull");
                         Location currentLocation = (Location) task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
                     } else {
                         Log.d(TAG, "onComplete : Location UnSuccessfull");
                     }
@@ -120,9 +124,17 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     // moving the camera into map
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera : moving the camera to, lat: " + latLng.latitude + " lng:" + latLng.longitude);
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        if(!title.equals("My Location")){
+            MarkerOptions options = new MarkerOptions()
+                    .position(latLng)
+                    .title(title);
+
+            myMap.addMarker(options);
+        }
     }
 
     @Override
