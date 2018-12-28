@@ -101,7 +101,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(MyMapActivity.this);
     }
 
-    // getting device location
+    // getting device current location and moving the camera
     private void getDeviceLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
