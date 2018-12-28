@@ -51,6 +51,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         getSearchValue();
     }
 
+    // getting values from Edittext from TextWatcher
     private void getSearchValue() {
         etSearchLocation.addTextChangedListener(new TextWatcher() {
             @Override
