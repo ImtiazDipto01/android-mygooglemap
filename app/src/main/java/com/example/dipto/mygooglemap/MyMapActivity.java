@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -31,11 +33,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.etSearchLocation)
     EditText etSearchLocation;
+    @BindView(R.id.ivLocateMe)
+    ImageView ivLocateMe;
 
     public static final float DEFAULT_ZOOM = 15f;
     private static final String TAG = "MyMapActivity";
@@ -61,8 +66,8 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String serachKey = s.toString() ;
-                if(serachKey.length() > 2){
+                String serachKey = s.toString();
+                if (serachKey.length() > 2) {
                     geoLocating(serachKey);
                 }
             }
@@ -76,20 +81,19 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
 
 
     // geoLocating method helps to get the searchResult for Location
-    private void geoLocating(String searchStr){
-        Geocoder geocoder = new Geocoder(MyMapActivity.this) ;
-        List<Address> list = new ArrayList<>() ;
-        try{
+    private void geoLocating(String searchStr) {
+        Geocoder geocoder = new Geocoder(MyMapActivity.this);
+        List<Address> list = new ArrayList<>();
+        try {
             list = geocoder.getFromLocationName(searchStr, 1);
-        }
-        catch (IOException e){
-            Log.e(TAG, "geoLocating IOException: "+e);
+        } catch (IOException e) {
+            Log.e(TAG, "geoLocating IOException: " + e);
         }
 
-        if(list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
-            Log.e(TAG, "geoLocating Address: "+address.toString());
-            if(searchStr.contains(".")){
+            Log.e(TAG, "geoLocating Address: " + address.toString());
+            if (searchStr.contains(".")) {
                 moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
             }
         }
@@ -129,7 +133,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         Log.d(TAG, "moveCamera : moving the camera to, lat: " + latLng.latitude + " lng:" + latLng.longitude);
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if(!title.equals("My Location")){
+        if (!title.equals("My Location")) {
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -148,5 +152,15 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         }
         myMap.setMyLocationEnabled(true);
         myMap.getUiSettings().setMyLocationButtonEnabled(false);
+    }
+
+    @OnClick({R.id.ivLocateMe})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ivLocateMe:{
+                getDeviceLocation();
+                break;
+            }
+        }
     }
 }
