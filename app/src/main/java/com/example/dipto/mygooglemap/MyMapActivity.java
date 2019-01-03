@@ -154,6 +154,7 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
         myMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
+
     @OnClick({R.id.ivLocateMe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
